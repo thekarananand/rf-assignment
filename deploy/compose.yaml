@@ -1,7 +1,7 @@
 services:
   ng_static_pdf:
     container_name: ng_static_pdf
-    build: ./ng_static_pdf
+    image: thekarananand/ng_static_pdf
     networks:
       - rf_assignment
     volumes:
@@ -9,7 +9,7 @@ services:
 
   rf_backend:
     container_name: rf_backend
-    build: ./rf_backend
+    image: thekarananand/rf_backend
     networks:
       - rf_assignment
     volumes:
@@ -17,7 +17,7 @@ services:
 
   rf_frontend:
     container_name: rf_frontend
-    build: ./rf_frontend
+    image: thekarananand/rf_frontend
     networks:
       - rf_assignment
     depends_on:
@@ -27,7 +27,7 @@ services:
 
   ng_rev_proxy:
     container_name: ng_rev_proxy
-    build: ./ng_rev_proxy
+    image: thekarananand/ng_rev_proxy
     networks:
       - rf_assignment
     ports:
