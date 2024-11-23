@@ -16,11 +16,16 @@ const Main = () => {
   const handleUpload = async(event) => {
     event.preventDefault()
 
-    setMetadata(null);
-    setLink(null)
-
     const file = event.target.files[0];
-    setWordFile(file);
+
+    if (!file.name.endsWith(".docx")) {
+      alert("Please select a .docx file!");
+      return;
+    } else {
+      setMetadata(null);
+      setLink(null)
+      setWordFile(file);
+    }
   }
 
   const sendFile = async(event) => {
