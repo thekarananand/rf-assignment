@@ -33,6 +33,8 @@
 
 - Run on Kubernetes
   ```
+  wget https://raw.githubusercontent.com/thekarananand/rf-assignment/main/deploy/defination.yaml
+  kubectl create -f defination.yaml
   ```
 
   [view defination.yaml](./deploy/defination.yaml)
