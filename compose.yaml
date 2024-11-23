@@ -1,0 +1,34 @@
+services:
+  ng_static_pdf:
+    container_name: ng_static_pdf
+    build: ./ng_static_pdf
+    networks:
+      - rf_assignment
+    volumes:
+      - ./shared:/opt/shared:ro
+
+  rf_backend:
+    container_name: rf_backend
+    build: ./rf_backend
+    networks:
+      - rf_assignment
+    volumes:
+      - ./shared:/opt/shared:rw
+
+  rf_frontend:
+    container_name: rf_frontend
+    build: ./rf_frontend
+    networks:
+      - rf_assignment
+
+  ng_rev_proxy:
+    container_name: ng_rev_proxy
+    build: ./ng_rev_proxy
+    networks:
+      - rf_assignment
+    ports:
+      - 8000:80
+
+networks:
+  rf_assignment:
+    name: rf_assignment
