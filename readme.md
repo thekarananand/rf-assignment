@@ -2,6 +2,7 @@
 
 ### Software Design
 
+![Software Design](./diagram.png)
 
 ### Bonus Features
 
