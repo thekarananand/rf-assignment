@@ -1,1 +1,149 @@
-will do it later!...
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rf-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rf-assignment
+      role: rf-frontend
+  template:
+    metadata:
+      labels:
+        app: rf-assignment
+        role: rf-frontend
+    spec:
+      containers:
+        - name: myapp
+          image: thekarananand/rf_frontend
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rf-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rf-assignment
+      role: rf-backend
+  template:
+    metadata:
+      labels:
+        app: rf-assignment
+        role: rf-backend
+    spec:
+      containers:
+        - name: myapp
+          image: thekarananand/rf_backend
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ng-static-pdf
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rf-assignment
+      role: ng-static-pdf
+  template:
+    metadata:
+      labels:
+        app: rf-assignment
+        role: ng-static-pdf
+    spec:
+      containers:
+        - name: myapp
+          image: thekarananand/ng_static_pdf
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rf-frontend-svc
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 3000
+      port: 80
+  selector:
+    app: rf-assignment
+    role: rf-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rf-backend-svc
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 80
+      port: 80
+  selector:
+    app: rf-assignment
+    role: rf-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ng-static-pdf-svc
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 80
+      port: 80
+  selector:
+    app: rf-assignment
+    role: ng-static-pdf
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /upload
+            pathType: Prefix
+            backend:
+              service:
+                name: rf-backend-svc
+                port:
+                  number: 80
+          - path: /static
+            pathType: Prefix
+            backend:
+              service:
+                name: ng-static-pdf-svc
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rf-frontend-svc
+                port:
+                  number: 80

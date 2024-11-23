@@ -23,7 +23,7 @@ SHARED_DIR = "/opt/shared"
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-@app.post("/")
+@app.post("/upload/")
 async def index(file: UploadFile = File(...)):
     try:
         file_path = os.path.join(UPLOAD_DIR, file.filename)
